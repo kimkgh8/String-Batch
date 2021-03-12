@@ -41,7 +41,7 @@ public class ExcelToPdf implements Tasklet {
             
             Document ouput_pdf = new Document();
             
-            PdfWriter.getInstance(ouput_pdf, new FileOutputStream("Excel2PDF_Output.pdf"));
+            PdfWriter.getInstance(ouput_pdf, new FileOutputStream("C:\\Users\\kim\\Documents\\Batch\\output\\Excel2PDF_Output.pdf"));
             
             ouput_pdf.open();
             
@@ -65,11 +65,14 @@ public class ExcelToPdf implements Tasklet {
             }
             ouput_pdf.add(my_table);
             ouput_pdf.add(new Chunk(""));
-
+            
+ 
 
             ouput_pdf.close();  
             input_excel.close();
-            	
+            
+            File renameFile = new File("C:\\Users\\kim\\Documents\\Batch\\input\\backup\\"+"TEST.xlsx");
+            excelFile.renameTo(renameFile);
         } catch(Exception e) {
         	System.out.println(e.getMessage());
         	e.printStackTrace();
