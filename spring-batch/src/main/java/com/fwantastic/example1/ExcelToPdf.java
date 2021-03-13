@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -21,6 +22,8 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import common.commonUtils;
+
 /**
  * 두 개의 메세지만 출력하고 끝나는 단순한 tasklet.
  */
@@ -30,49 +33,57 @@ public class ExcelToPdf implements Tasklet {
         System.out.println("작업 시작...");
         
         try {
-        	File excelFile = new File("C:\\Users\\kim\\Documents\\Batch\\input\\TEST.xlsx");
-            
-            FileInputStream input_excel = new FileInputStream(excelFile);
-            XSSFWorkbook xls_workbook = new XSSFWorkbook(input_excel);
-            
-            XSSFSheet worksheet = xls_workbook.getSheetAt(0);
+        	
+        	Map<String, String> propertyMap = commonUtils.getProperties("ExcelToPdf.properties");
+        	
+        	//대상디렉토리
+        	File excelDir = new File(propertyMap.get("inputFilePath"));
+        	File[] excelFiles = excelDir.listFiles();
+        	
+        	for (File targetFile:excelFiles) {
+        		 FileInputStream input_excel = new FileInputStream(targetFile);
+        		 // 확장자
+        		 String extension = targetFile.getName().substring(targetFile.getName().lastIndexOf("."),targetFile.getName().length());
+        		 // 확장자를 제거한 파일명
+        		 String fileName = targetFile.getName().substring(0,targetFile.getName().lastIndexOf("."));
+        		 System.out.println("파일명 : " + fileName);
+                 XSSFWorkbook xls_workbook = new XSSFWorkbook(input_excel);
+                 
+                 XSSFSheet worksheet = xls_workbook.getSheetAt(0);
 
-            Iterator<Row> rowIterator = worksheet.iterator();
-            
-            Document ouput_pdf = new Document();
-            
-            PdfWriter.getInstance(ouput_pdf, new FileOutputStream("C:\\Users\\kim\\Documents\\Batch\\output\\Excel2PDF_Output.pdf"));
-            
-            ouput_pdf.open();
-            
-            PdfPTable my_table = new PdfPTable(2);
+                 Iterator<Row> rowIterator = worksheet.iterator();
+                 
+                 Document ouput_pdf = new Document();
+                 PdfWriter.getInstance(ouput_pdf, new FileOutputStream(propertyMap.get("outFilePath") + fileName+".pdf"));
+                 ouput_pdf.open();
+                 
+                 PdfPTable my_table = new PdfPTable(2);
 
-            PdfPCell table_cell;
-            
-            while (rowIterator.hasNext()) {
-            	Row row = rowIterator.next();
-            	Iterator<Cell> cellIterator = row.cellIterator();
-            	while (cellIterator.hasNext()) {
-            		Cell cell = cellIterator.next();
-            		switch (cell.getCellTypeEnum()) {
-            		case STRING:
-            			table_cell=new PdfPCell(new Phrase(cell.getStringCellValue()));
-            			my_table.addCell(table_cell);
-            			break;
-            		}
-            	}
+                 PdfPCell table_cell;
+                 
+                 while (rowIterator.hasNext()) {
+                 	Row row = rowIterator.next();
+                 	Iterator<Cell> cellIterator = row.cellIterator();
+                 	while (cellIterator.hasNext()) {
+                 		Cell cell = cellIterator.next();
+                 		switch (cell.getCellTypeEnum()) {
+                 		case STRING:
+                 			table_cell=new PdfPCell(new Phrase(cell.getStringCellValue()));
+                 			my_table.addCell(table_cell);
+                 			break;
+                 		}
+                 	}
 
-            }
-            ouput_pdf.add(my_table);
-            ouput_pdf.add(new Chunk(""));
-            
- 
+                 }
+                 ouput_pdf.add(my_table);
+                 ouput_pdf.add(new Chunk(""));
 
-            ouput_pdf.close();  
-            input_excel.close();
+                 ouput_pdf.close();  
+                 input_excel.close();
+                 //File renameFile = new File(propertyMap.get("backupPath")+targetFile.getName()+".xlsx");
+                 //targetFile.renameTo(renameFile);
+        	}
             
-            File renameFile = new File("C:\\Users\\kim\\Documents\\Batch\\input\\backup\\"+"TEST.xlsx");
-            excelFile.renameTo(renameFile);
         } catch(Exception e) {
         	System.out.println(e.getMessage());
         	e.printStackTrace();
