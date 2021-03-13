@@ -6,21 +6,11 @@ import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.spire.xls.*;
 
 import common.commonUtils;
 
@@ -46,7 +36,13 @@ public class ExcelToPdf implements Tasklet {
         		 String extension = targetFile.getName().substring(targetFile.getName().lastIndexOf("."),targetFile.getName().length());
         		 // 확장자를 제거한 파일명
         		 String fileName = targetFile.getName().substring(0,targetFile.getName().lastIndexOf("."));
-        		 System.out.println("파일명 : " + fileName);
+        		 
+        		 Workbook wb = new Workbook();
+        		 wb.loadFromFile(targetFile.getPath());
+        		 //PDF로 저장함
+        	     wb.saveToFile(propertyMap.get("outFilePath") + fileName+".pdf",FileFormat.PDF);
+        		 
+        		 /* 다른 방법
                  XSSFWorkbook xls_workbook = new XSSFWorkbook(input_excel);
                  
                  XSSFSheet worksheet = xls_workbook.getSheetAt(0);
@@ -66,8 +62,8 @@ public class ExcelToPdf implements Tasklet {
                  	Iterator<Cell> cellIterator = row.cellIterator();
                  	while (cellIterator.hasNext()) {
                  		Cell cell = cellIterator.next();
-                 		switch (cell.getCellTypeEnum()) {
-                 		case STRING:
+                 		switch (cell.getCellType()) {
+                 		case Cell.CELL_TYPE_STRING:
                  			table_cell=new PdfPCell(new Phrase(cell.getStringCellValue()));
                  			my_table.addCell(table_cell);
                  			break;
@@ -76,10 +72,12 @@ public class ExcelToPdf implements Tasklet {
 
                  }
                  ouput_pdf.add(my_table);
-                 ouput_pdf.add(new Chunk(""));
-
                  ouput_pdf.close();  
                  input_excel.close();
+                 */
+        		 
+        		 
+        		 
                  //File renameFile = new File(propertyMap.get("backupPath")+targetFile.getName()+".xlsx");
                  //targetFile.renameTo(renameFile);
         	}

@@ -5,7 +5,6 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Spring Batch example</name>
   <description>Spring Batch example</description>
-
 <!-- 버전 관리 섹션 -->
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -17,6 +16,15 @@
         <h2.version>1.4.200</h2.version>
         <junit.version>4.12</junit.version>
     </properties>
+	
+	<!-- Spire.xls for java -->
+	<repositories>
+        <repository>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>http://repo.e-iceblue.com/nexus/content/groups/public/</url>
+        </repository>
+	</repositories>
 
     <dependencies>
         <!-- 스프링 배치의 코어를 담당하는 파트들을 가지고 있다. -->
@@ -100,5 +108,18 @@
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>3.15</version>
 		</dependency>
+		
+		<dependency>
+        	<groupId> e-iceblue </groupId>
+        	<artifactId>spire.pdf</artifactId>
+        	<version>3.11.6</version>
+		</dependency>
+		
+    	<dependency>
+        	<groupId>e-iceblue</groupId>
+        	<artifactId>spire.pdf.free</artifactId>
+        	<version>3.9.0</version>
+    	</dependency>
+		
     </dependencies>
 </project>
