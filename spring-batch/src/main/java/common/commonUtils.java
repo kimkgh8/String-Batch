@@ -6,9 +6,17 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.logging.log4j.Logger;
 
 public class commonUtils {
 	static String commonPropertyPath = "C:\\common\\Properties\\";
+	
+	/**
+	 * getProperties메소드
+	 * 프로퍼티파일로부터 값 가져오기.
+	 * @param file
+	 * @return Map
+	 */
 	public static Map<String, String> getProperties(String file) {
 		Map<String, String> result = new HashMap<String, String>();
 		
@@ -44,5 +52,36 @@ public class commonUtils {
 		}
 		
 		return result;
+	}
+	
+	public static void outLog(@SuppressWarnings("rawtypes") Class clazz, String logLevel, String message) {
+		try {
+			System.setProperty("log4j.configurationFile", "file:/C:/common/Properties/log4j2.xml");
+			System.setProperty("log4j.configuratorClass", "org.apache.log4j.xml.DOMConfigurator");
+			Logger logger = org.apache.logging.log4j.LogManager.getLogger(clazz.getName());
+			switch (logLevel) {
+			case "DEBUG":
+				logger.debug(message);
+				break;
+			case "INFO":
+				logger.info(message);
+				break;
+			case "WARN":
+				logger.warn(message);
+				break;
+			case "ERROR":
+				logger.error(message);
+				break;
+			case "FATAL":
+				logger.fatal(message);
+				break;
+			default:
+				logger.error("지정된 로그 레벨이 정의 되어 있지 않습니다.");
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<RollingFile name="commonFileAppender" filename="C:/common/logs/log.log"
+			filePattern="C:/common/logs/log.log.%i">
+			<Patternlayout pattern="%d %-5p %c %m%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="5 MB" />
+			</Policies>	
+		</RollingFile>
+	</Appenders>
+	
+	<Loggers>
+    	<Logger name="src/main/java">
+        	<level value="debug"/>
+        	<appender-ref ref="commonFileAppender" />
+    	</Logger>
+	</Loggers>
+</Configuration>

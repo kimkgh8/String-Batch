@@ -1,27 +1,27 @@
 package com.fwantastic.example1;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import com.spire.xls.*;
+
+import com.spire.xls.FileFormat;
+import com.spire.xls.Workbook;
 
 import common.commonUtils;
 
 /**
- * 두 개의 메세지만 출력하고 끝나는 단순한 tasklet.
+ * PDF변환 처리
+ * 엑셀파일을 PDF파일로 변환하는 배치프로그램
+ * 프로퍼티파일에 지정된 경로의 폴더 안의 파일이 대상
  */
 public class ExcelToPdf implements Tasklet {
-
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
         System.out.println("작업 시작...");
-        
+        commonUtils.outLog(ExcelToPdf.class, "INFO", "PDF변환 처리 작업 시작");
         try {
         	
         	Map<String, String> propertyMap = commonUtils.getProperties("ExcelToPdf.properties");
@@ -31,7 +31,6 @@ public class ExcelToPdf implements Tasklet {
         	File[] excelFiles = excelDir.listFiles();
         	
         	for (File targetFile:excelFiles) {
-        		 FileInputStream input_excel = new FileInputStream(targetFile);
         		 // 확장자
         		 String extension = targetFile.getName().substring(targetFile.getName().lastIndexOf("."),targetFile.getName().length());
         		 // 확장자를 제거한 파일명
@@ -88,6 +87,7 @@ public class ExcelToPdf implements Tasklet {
         }
         
         System.out.println("작업 완료!");
+        commonUtils.outLog(ExcelToPdf.class, "INFO", "PDF변환 처리 작업 완료");
         return null;
     }
 
