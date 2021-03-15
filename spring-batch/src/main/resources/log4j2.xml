@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %5p [%c] %m%n" />
+		</Console>
+		<RollingFile name="file" filename="C:/common/logs/batch.log"
+			filePattern="C:/common/logs/$${date:yyyy}/$${date:MM}/all_%d{yyyyMMddHH}.log">
+			<Patternlayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="5 MB" />
+				<TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+			</Policies>	
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+    	<Logger name="com.fwantastic.example1">
+        	<level value="debug"/>
+        	<appender-ref ref="file" />
+    	</Logger>
+		<Root level="error">
+            <AppenderRef ref="console"/>
+    	</Root>    	
+	</Loggers>
+
+</Configuration>

@@ -3,6 +3,8 @@ package com.fwantastic.example1;
 import java.io.File;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -20,10 +22,8 @@ import common.commonUtils;
  */
 public class ExcelToPdf implements Tasklet {
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
-        System.out.println("작업 시작...");
         commonUtils.outLog(ExcelToPdf.class, "INFO", "PDF변환 처리 작업 시작");
         try {
-        	
         	Map<String, String> propertyMap = commonUtils.getProperties("ExcelToPdf.properties");
         	
         	//대상디렉토리
@@ -86,7 +86,6 @@ public class ExcelToPdf implements Tasklet {
         	e.printStackTrace();
         }
         
-        System.out.println("작업 완료!");
         commonUtils.outLog(ExcelToPdf.class, "INFO", "PDF변환 처리 작업 완료");
         return null;
     }

@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class commonUtils {
@@ -56,9 +58,9 @@ public class commonUtils {
 	
 	public static void outLog(@SuppressWarnings("rawtypes") Class clazz, String logLevel, String message) {
 		try {
-			System.setProperty("log4j.configurationFile", "file:/C:/common/Properties/log4j2.xml");
-			System.setProperty("log4j.configuratorClass", "org.apache.log4j.xml.DOMConfigurator");
-			Logger logger = org.apache.logging.log4j.LogManager.getLogger(clazz.getName());
+			//System.setProperty("log4j.configurationFile", "file:\\\\C:\\common\\Properties\\log4j2.xml");
+			//System.setProperty("log4j.configuratorClass", "org.apache.log4j.xml.DOMConfigurator");
+			Logger logger = LogManager.getLogger(clazz.getName());
 			switch (logLevel) {
 			case "DEBUG":
 				logger.debug(message);
