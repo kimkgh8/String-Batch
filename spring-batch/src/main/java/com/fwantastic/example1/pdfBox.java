@@ -17,13 +17,11 @@ import org.springframework.batch.repeat.RepeatStatus;
 import common.commonUtils;
 
 /**
- * PDF변환 처리
- * 엑셀파일을 PDF파일로 변환하는 배치프로그램
- * 프로퍼티파일에 지정된 경로의 폴더 안의 파일이 대상
+ * PDFBOX를 이용한 PDF파일의 텍스트 추출
  */
 public class pdfBox implements Tasklet {
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
-        commonUtils.outLog(pdfBox.class, "INFO", "PDF변환 처리 작업 시작");
+        commonUtils.outLog(pdfBox.class, "INFO", "PDF텍스트 추출 처리 작업 시작");
         
         String src = "D:\\study\\data\\test.pdf";
 
@@ -41,7 +39,7 @@ public class pdfBox implements Tasklet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        commonUtils.outLog(pdfBox.class, "INFO", "PDF변환 처리 작업 완료");
+        commonUtils.outLog(pdfBox.class, "INFO", "PDF텍스트 추출 작업 완료");
         return null;
     }
     private static COSDocument parseDocument(InputStream is) throws IOException {
