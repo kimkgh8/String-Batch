@@ -1,8 +1,14 @@
 package com.fwantastic.example1;
 
-import java.net.URLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
+import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -18,40 +24,32 @@ import common.commonUtils;
 public class pdfBox implements Tasklet {
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
         commonUtils.outLog(pdfBox.class, "INFO", "PDF변환 처리 작업 시작");
-        try {
-        	//Map<String, String> propertyMap = commonUtils.getProperties("ExcelToPdf.properties");
-        	
-        	
-        	// 문서 만들기
-
-        	PDDocument doc = new PDDocument();
-        	// 파일 다운로드 설정
-
-        	response.setContentType("application/pdf");
-
-        	String fileName = URLEncoder.encode("샘플PDF", "UTF-8");
-
-        	response.setHeader("Content-Disposition", "inline; filename=" + fileName + ".pdf");
-
-
-
-        	// PDF 파일 출력
-
-        	doc.save(response.getOutputStream());
-
-        	doc.close();
-
-
-
-        	출처: https://offbyone.tistory.com/267 [쉬고 싶은 개발자]
-            
-        } catch(Exception e) {
-        	System.out.println(e.getMessage());
-        	e.printStackTrace();
-        }
         
+        String src = "D:\\study\\data\\test.pdf";
+
+        String text = null;
+        
+        COSDocument cosDoc = null;
+        try {
+        	File file  = new File(src);
+        	InputStream is = new FileInputStream(file);
+        	cosDoc = parseDocument(is);
+        	PDFTextStripper striper = new PDFTextStripper();
+        	text = striper.getText(new PDDocument(cosDoc));
+        	System.out.println(text);
+        		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         commonUtils.outLog(pdfBox.class, "INFO", "PDF변환 처리 작업 완료");
         return null;
     }
+    private static COSDocument parseDocument(InputStream is) throws IOException {
+    	PDFParser parser = new PDFParser(is);
+    	parser.parse();
+    	return parser.getDocument();
+    		
+    }
+
 
 }
