@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -43,7 +44,7 @@ public class pdfBox implements Tasklet {
         return null;
     }
     private static COSDocument parseDocument(InputStream is) throws IOException {
-    	PDFParser parser = new PDFParser(is);
+    	PDFParser parser = new PDFParser((RandomAccessRead) is);
     	parser.parse();
     	return parser.getDocument();
     		
